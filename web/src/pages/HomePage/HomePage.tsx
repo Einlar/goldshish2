@@ -1,7 +1,9 @@
 import { MetaTags } from '@redwoodjs/web'
 import { styled } from '@stitches/react'
-
+import { useAuth } from '@redwoodjs/auth'
 const HomePage = () => {
+  const { logIn, logOut, isAuthenticated, currentUser } = useAuth()
+
   return (
     <>
       <Page>
@@ -19,6 +21,10 @@ const HomePage = () => {
             <p style={{ textAlign: 'center', fontSize: '26px' }}>
               Work in progress...
             </p>
+            <button onClick={isAuthenticated ? logOut : logIn}>
+              {isAuthenticated ? 'Log Out' : 'Log In'}
+            </button>
+            {isAuthenticated && <p>{currentUser.email}</p>}
           </article>
         </div>
       </Page>
