@@ -33,6 +33,7 @@
 	"type": "module",
 	"dependencies": {
 		"@nhost/nhost-js": "^2.2.15",
-		"graphql": "^16.8.0"
+		"graphql": "^16.8.0",
+		"pdfjs-dist": "^3.10.111"
 	}
 }
