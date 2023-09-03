@@ -10,6 +10,7 @@
 
 	export let viewport: PageViewport;
 	export let pageNumber: number;
+	export let id: string;
 
 	let page: PDFPageProxy | undefined;
 
@@ -18,10 +19,23 @@
 	};
 </script>
 
-<div use:viewportAction on:enterViewport={() => loadPage()}>
+<div
+	use:viewportAction
+	on:enterViewport={() => loadPage()}
+	{id}
+	data-page-number={pageNumber}
+	aria-label="Page {pageNumber}"
+	role="region"
+>
 	{#if page}
 		<Page {page} />
 	{:else}
 		<canvas width={viewport.width} height={viewport.height} />
 	{/if}
 </div>
+
+<style>
+	div {
+		border: 1px solid black;
+	}
+</style>
