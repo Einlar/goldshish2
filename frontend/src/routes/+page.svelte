@@ -22,16 +22,17 @@
 	.grid {
 		display: grid;
 		grid-template-columns: 1fr 3fr;
-		justify-content: center;
+		height: 100%;
 	}
 
 	.list {
-		background-color: yellow;
+		background-color: lightgreen;
 	}
 
 	.pages {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
+		justify-content: center;
 	}
 </style>

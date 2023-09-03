@@ -9,6 +9,8 @@
 	import { writable } from 'svelte/store';
 	import { getDocument } from 'pdfjs-dist';
 	import PageLoader from './utils/PageLoader.svelte';
+	import DownloadProgress from './utils/DownloadProgress.svelte';
+	import Spinner from './utils/Spinner.svelte';
 
 	/**
 	 * URL of the PDF to display
@@ -37,6 +39,15 @@
 	let loadingTask: PDFDocumentLoadingTask = getDocument({ url: src, worker });
 	loadingTask.promise.then((doc) => currentDocument.set(doc));
 
+	let progress: number = 0;
+	interface Progress {
+		loaded: number;
+		total: number;
+	}
+	loadingTask.onProgress = (p: Progress) => {
+		progress = p.loaded / p.total;
+	};
+
 	/**
 	 * Cleanup
 	 */
@@ -48,7 +59,8 @@
 
 {#if browser}
 	{#await loadingTask.promise}
-		<p>Downloading</p>
+		<DownloadProgress running={true} bind:progress />
+		<Spinner />
 	{:then document}
 		{#await document.getPage(1) then firstPage}
 			{@const viewport = firstPage.getViewport({ scale })}
