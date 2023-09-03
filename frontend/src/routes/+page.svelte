@@ -13,4 +13,21 @@
 <h1>Welcome to SvelteKit</h1>
 <p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
 
-<PdfHighligter src={url} />
+<div class="grid">
+	<div class="list" />
+	<div>
+		<PdfHighligter src={url} />
+	</div>
+</div>
+
+<style>
+	.grid {
+		display: grid;
+		grid-template-columns: 1fr 3fr;
+		justify-content: center;
+	}
+
+	.list {
+		background-color: yellow;
+	}
+</style>
