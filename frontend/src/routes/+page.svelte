@@ -11,6 +11,10 @@
 	const url = 'https://arxiv.org/pdf/1706.03762.pdf';
 </script>
 
+<svelte:head>
+	<title>PDF Viewer</title>
+</svelte:head>
+
 <div class="grid">
 	<div class="list" />
 	<div class="pages">
