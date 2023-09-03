@@ -41,7 +41,6 @@
 		/* This allows the highlights not to cover the text */
 		mix-blend-mode: multiply;
 		line-height: 1;
-		border: 1px solid black;
 	}
 
 	div > :global(span) {

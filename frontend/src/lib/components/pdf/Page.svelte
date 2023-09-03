@@ -1,9 +1,10 @@
+<svelte:options immutable />
+
 <script lang="ts">
 	import type { PDFPageProxy } from 'pdfjs-dist/types/src/display/api';
-	import type { TextLayerRenderTask } from 'pdfjs-dist/types/src/display/text_layer';
 	import CanvasLayer from './utils/CanvasLayer.svelte';
-	import PageContainer from './utils/PageContainer.svelte';
 	import TextLayer from './utils/TextLayer.svelte';
+	import AnnotationLayer from './utils/AnnotationLayer.svelte';
 
 	export let page: PDFPageProxy;
 
@@ -18,13 +19,17 @@
 	{#if !viewport}
 		<p>Loading...</p>
 	{:else}
-		<PageContainer>
-			<CanvasLayer {viewport} {page} />
-
+		<div>
+			<CanvasLayer {viewport} {page} on:rendered />
 			<TextLayer {viewport} {page} {scale} />
-		</PageContainer>
+			<AnnotationLayer {viewport} {page} />
+		</div>
 	{/if}
 </div>
 
 <style>
+	div {
+		position: relative;
+		padding: 0;
+	}
 </style>

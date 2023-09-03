@@ -7,15 +7,13 @@
 	});
 
 	//TODO Remove hardcoded file UUID
-	const url = nhost.storage.getPublicUrl({ fileId: '3eb37762-6fb1-4f77-accf-0fead38ffaf9' });
+	// const url = nhost.storage.getPublicUrl({ fileId: '3eb37762-6fb1-4f77-accf-0fead38ffaf9' });
+	const url = 'https://arxiv.org/pdf/1706.03762.pdf';
 </script>
-
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
 
 <div class="grid">
 	<div class="list" />
-	<div>
+	<div class="pages">
 		<PdfHighligter src={url} />
 	</div>
 </div>
@@ -29,5 +27,11 @@
 
 	.list {
 		background-color: yellow;
+	}
+
+	.pages {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
 	}
 </style>
