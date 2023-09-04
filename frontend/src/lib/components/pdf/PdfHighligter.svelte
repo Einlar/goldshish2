@@ -13,6 +13,7 @@
 	import Spinner from './utils/Spinner.svelte';
 	import { page } from '$app/stores';
 	import ScrollBack from './utils/ScrollBack.svelte';
+	import Tooltip from './utils/Tooltip.svelte';
 
 	/**
 	 * URL of the PDF to display
@@ -103,6 +104,7 @@
 		<DownloadProgress running={true} bind:progress />
 		<Spinner />
 	{:then document}
+		<Tooltip />
 		{#await document.getPage(1) then firstPage}
 			{@const viewport = firstPage.getViewport({ scale })}
 			{#each Array.from({ length: document.numPages }, (_, i) => i + 1) as pageNumber}

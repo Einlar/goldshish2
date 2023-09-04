@@ -49,10 +49,17 @@
 		white-space: pre;
 		cursor: text;
 		transform-origin: 0% 0%;
+		/* Hack to improve text selection */
+		/* This should be the way: https://github.com/mozilla/pdf.js/pull/7539, but it was removed https://github.com/mozilla/pdf.js/issues/16684 and now we have this https://github.com/mozilla/pdf.js/issues/15733 */
+		/* padding-bottom: 100%; */
+		/* padding-right: 100%; */
 	}
 
 	div > :global(span)::selection {
 		background: yellow;
 		text-shadow: none;
+	}
+
+	.noselect {
 	}
 </style>
