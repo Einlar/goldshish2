@@ -44,6 +44,10 @@
 </div>
 
 <style>
+	canvas {
+		z-index: 1;
+	}
+
 	.viewport {
 		position: relative;
 	}

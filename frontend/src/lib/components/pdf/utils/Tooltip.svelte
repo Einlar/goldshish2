@@ -1,34 +1,27 @@
 <script lang="ts">
 	let visible = false;
 
-	let width = 0,
-		height = 0;
+	let width = 0;
 	let position = { top: 0, left: 0 };
 
-	//TODO Improve
 	const showTooltip = () => {
 		const selection = document.getSelection();
-		console.log({ selection });
 		const selectedText = selection?.toString().trim();
-
 		visible = selectedText?.length !== 0;
 
-		console.log(selection?.getRangeAt(0));
+		const range = selection?.getRangeAt(0);
 
-		const anchor = selection?.anchorNode?.parentElement;
-		const focus = selection?.focusNode?.parentElement;
+		if (range) {
+			// Make use of all the rects that make up the selection, not just the focus and the anchor
+			const rects = Array.from(range.getClientRects());
 
-		if (anchor && focus) {
-			// Avoid the tooltip jumping when dragging the mouse to some white space, which causes the focus to be the container div, moving the tooltip to the top of the current PDF page
-			const elements = [anchor, focus].filter((el) => el.nodeName === 'SPAN');
-			const bboxes = elements.map((el) => el.getBoundingClientRect());
-
-			const top = Math.min(...bboxes.map((bbox) => bbox.top));
-			const left = Math.min(...bboxes.map((bbox) => bbox.left));
+			// Apparently, the very small rects are the ones that make the tooltip jump to the top of the page, so we exclude them (not sure why they are there in the first place though)
+			const top = Math.min(...rects.filter((rect) => rect.width > 1).map((rect) => rect.top));
+			const left = Math.min(...rects.filter((rect) => rect.width > 1).map((rect) => rect.left));
 
 			position = {
-				top: top + window.scrollY,
-				left: left + window.scrollX - width - 20
+				top: Math.floor(top + window.scrollY),
+				left: Math.floor(left + window.scrollX - width - 20)
 			};
 		}
 	};
@@ -41,7 +34,6 @@
 	style="left: {position.left}px; top: {position.top}px;"
 	class:hidden={!visible}
 	bind:clientWidth={width}
-	bind:clientHeight={height}
 >
 	Highlight
 </div>

@@ -22,6 +22,35 @@
 			viewport
 		});
 
+		/**
+		 * This replicates the "bindMouse()" function from the official PDFViewer
+		 * It improves text selection on Firefox, but not much on Chrome it would seem.
+		 * It is basically a "hack". A div is created at the bottom of the page, and it is extended to fill the page onmousedown. This maintains the selection when the mouse
+		 * is dragged over the whitespace.
+		 * See:
+		 * - Implementation: https://github.com/mozilla/pdf.js/blob/cf5a1d60a61e13108afffbb1046521b5bb46f918/web/text_layer_builder.js#L182-L233
+		 * - Issue (Chrome): https://github.com/mozilla/pdf.js/issues/9843
+		 *
+		 * According to this (https://github.com/agentcooper/react-pdf-highlighter/issues/246) there should be an alternate way of showing the text layer that solves this
+		 * on Chrome (but not on Firefox), so I could try switching that
+		 */
+		renderTask.promise.then(() => {
+			const endOfContent = document.createElement('div');
+			endOfContent.classList.add('endOfContent');
+			div.append(endOfContent);
+
+			div.addEventListener('mousedown', (evt) => {
+				const divBounds = div.getBoundingClientRect();
+				// Adjust the top side of the div to the start of the selection (it seems to have not much effect)
+				// const r = Math.max(0, (evt.pageY - divBounds.top) / divBounds.height);
+				// endOfContent.style.top = (r * 100).toFixed(2) + '%';
+				// console.log(evt.pageY);
+				endOfContent.style.top = evt.clientY - divBounds.top + 'px';
+				endOfContent.classList.add('active');
+			});
+			div.addEventListener('mouseup', () => endOfContent.classList.remove('active'));
+		});
+
 		return {
 			destroy() {
 				renderTask?.cancel();
@@ -41,6 +70,8 @@
 		/* This allows the highlights not to cover the text */
 		mix-blend-mode: multiply;
 		line-height: 1;
+		z-index: 2;
+		opacity: 0.8;
 	}
 
 	div > :global(span) {
@@ -49,10 +80,6 @@
 		white-space: pre;
 		cursor: text;
 		transform-origin: 0% 0%;
-		/* Hack to improve text selection */
-		/* This should be the way: https://github.com/mozilla/pdf.js/pull/7539, but it was removed https://github.com/mozilla/pdf.js/issues/16684 and now we have this https://github.com/mozilla/pdf.js/issues/15733 */
-		/* padding-bottom: 100%; */
-		/* padding-right: 100%; */
 	}
 
 	div > :global(span)::selection {
@@ -60,6 +87,17 @@
 		text-shadow: none;
 	}
 
-	.noselect {
+	:global(.endOfContent) {
+		display: block;
+		position: absolute;
+		inset: 100% 0 0;
+		z-index: -1;
+		cursor: default;
+		user-select: none;
+		background-color: red;
+	}
+
+	:global(.active) {
+		top: 0;
 	}
 </style>
